@@ -17,6 +17,11 @@ See docs/process.md for how version tagging works.
 
 Current Trunk
 -------------
+- System libraries such as libc and libc++ are now included by default at
+  link time rather than selecitvly included based on the symbols uses in the
+  input object files.  For small programs that don't use any system libraries
+  this would result in slightly slower build time with the old fastcomp
+  backend.  In order to exclude these libraries build with `-nostdlib`.
 - Emscripten can now compile assembly files in llvm's .s/.S file format.
 - Remove test-only environment variable handling for `EMCC_LEAVE_INPUTS_RAW`.
   The two uses cases in our test code were covered by the `-nostdlib` option.
