@@ -6177,7 +6177,14 @@ return malloc(size);
 
   @needs_make('mingw32-make')
   @is_slow_test
-  def test_zlib(self):
+  @parameterized({
+    'cmake': (True,),
+    'configure': (False,)
+  })
+  def test_zlib(self, use_cmake):
+    if WINDOWS and not use_cmake:
+      self.skipTest("Windows cannot run configure sh scripts")
+
     self.maybe_closure()
 
     if self.run_name == 'asm2g':
@@ -6185,8 +6192,7 @@ return malloc(size);
     if self.run_name == 'asm2f':
       return self.skipTest('asm2f affects cflags in a way that changes zlib compile flag reporting, so the stdout is different')
 
-    use_cmake_configure = WINDOWS
-    if use_cmake_configure:
+    if use_cmake:
       make_args = []
       configure = [PYTHON, path_from_root('emcmake'), 'cmake', '.']
     else:
